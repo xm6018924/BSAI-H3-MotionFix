@@ -2,7 +2,7 @@
   "id": "20166b84-690e-47a6-b80b-672ec438d132",
   "revision": 0,
   "last_node_id": 37,
-  "last_link_id": 58,
+  "last_link_id": 59,
   "nodes": [
     {
       "id": 3,
@@ -2082,9 +2082,7 @@
           "localized_name": "整数",
           "name": "INT",
           "type": "INT",
-          "links": [
-            26
-          ]
+          "links": []
         },
         {
           "label": "BOOL",
@@ -2276,7 +2274,7 @@
           "widget": {
             "name": "length"
           },
-          "link": 26
+          "link": 59
         }
       ],
       "outputs": [
@@ -2966,7 +2964,8 @@
           "name": "ref_length",
           "type": "INT",
           "links": [
-            58
+            58,
+            59
           ]
         }
       ],
@@ -3178,14 +3177,6 @@
       1,
       8,
       6,
-      "INT"
-    ],
-    [
-      26,
-      21,
-      1,
-      8,
-      7,
       "INT"
     ],
     [
@@ -3410,6 +3401,14 @@
       9,
       24,
       13,
+      "INT"
+    ],
+    [
+      59,
+      37,
+      9,
+      8,
+      7,
       "INT"
     ]
   ],
