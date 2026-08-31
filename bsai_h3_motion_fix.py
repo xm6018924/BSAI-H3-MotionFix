@@ -58,9 +58,11 @@ class BSAI_H3_MotionFix:
             },
         }
 
-    RETURN_TYPES = ("STRING", "STRING", "STRING", "STRING", "STRING", "STRING")
+    RETURN_TYPES = ("STRING", "STRING", "STRING", "STRING", "STRING", "STRING",
+                    "BOOLEAN", "FLOAT", "STRING", "INT")
     RETURN_NAMES = ("recommended_steps", "attention_advice", "ref_weight_advice",
-                    "negative_prompt", "checklist", "post_process")
+                    "negative_prompt", "checklist", "post_process",
+                    "vsa_enabled", "video_keep_percent", "ladder", "ref_length")
     FUNCTION = "run"
     CATEGORY = "BSAI-Nodes/MiniMax-H3"
     OUTPUT_NODE = True  # allows running this node standalone; results visible in History
@@ -145,6 +147,21 @@ class BSAI_H3_MotionFix:
             "    smoothing replay 去时序闪烁（保持 11 actual / 9 forecast 原生调度）\n"
             "  · 分块超分注意接缝与时间闪烁：正常速度播放两遍再逐帧验眼/嘴/发际线")
 
+        # ── FastH3 蒸馏模型驱动输出（自动接入 BSAI-FastH3 极速链路）──
+        # 注：FastH3 是 4-step 蒸馏模型（ladder 用训练跳点，勿改阶梯），
+        #     高速动作画面噪点/毛刺/拖影的主因是 VSA 稀疏注意力丢细节 → 关 VSA / 提高 keep_percent。
+        if level == "fast":
+            vsa_enabled = False          # 高速动作关 VSA → Dense 注意力防边缘虚影/毛刺
+            video_keep_percent = 35.0    # 若保留 VSA，把保留百分比提到 ~35% 保细节
+        elif level == "medium":
+            vsa_enabled = True
+            video_keep_percent = 20.0
+        else:
+            vsa_enabled = True
+            video_keep_percent = 10.0    # 静态默认官方值
+        ladder = "999,749,500,250"       # FastH3 v0.2 训练 4 步阶梯（勿用均匀网格）
+        ref_length = max(5, int(round(clip_seconds * 24)))  # 24fps 帧数
+
         ui = {"bsai_motionfix": {
             "recommended_steps": steps,
             "attention_advice": att,
@@ -152,8 +169,13 @@ class BSAI_H3_MotionFix:
             "negative_prompt": neg,
             "checklist": checklist,
             "post_process": post,
+            "vsa_enabled": vsa_enabled,
+            "video_keep_percent": video_keep_percent,
+            "ladder": ladder,
+            "ref_length": ref_length,
         }}
-        return (steps, att, rw, neg, checklist, post), {"ui": ui}
+        return (steps, att, rw, neg, checklist, post,
+                vsa_enabled, video_keep_percent, ladder, ref_length), {"ui": ui}
 
 
 NODE_CLASS_MAPPINGS = {

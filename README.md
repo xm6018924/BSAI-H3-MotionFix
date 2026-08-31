@@ -13,9 +13,32 @@
 
 | 节点 | 说明 |
 | --- | --- |
-| **BSAI H3 MotionFix 高速动作毛刺噪点修复向导** | 输入运动等级 / 是否 Turbo / 参考权重 / 片段时长 / 注意力方案 → 输出 6 组修复配置：推荐步数、注意力建议、参考权重建议、大动态负向词、检查清单、后处理方案 |
+| **BSAI H3 MotionFix 高速动作毛刺噪点修复向导** | 输入运动等级 / 是否 Turbo / 参考权重 / 片段时长 / 注意力方案 → 输出 6 组修复配置 + **4 个 FastH3 驱动输出（自动接入 BSAI-FastH3 极速链路：VSA 开关 / keep_percent / 阶梯 / 片段帧数）** |
 
-纯规则引擎（无模型加载、零显存、零耗时），执行即出方案，可直接照抄进现有 H3 工作流。
+纯规则引擎（无模型加载、零显存、零耗时），执行即出方案；**升级后可直接自动驱动 FastH3 极速链路参数**（见下方「自动驱动」）。
+
+### 自动驱动（v1.3，让修复真正生效）
+
+MotionFix 不再只是"给建议"——它新增 4 个**可接线驱动输出**，连入 BSAI-FastH3 极速链路后，**改一下运动等级，生成参数自动跟着变**，画面毛刺/噪点/拖影直接缓解：
+
+| 输出 | 类型 | 作用 |
+| --- | --- | --- |
+| `vsa_enabled` | BOOLEAN | 高速动作 → **关 VSA（Dense 注意力）**，防稀疏注意力在动作镜头丢细节出的边缘虚影/毛刺/噪点 |
+| `video_keep_percent` | FLOAT | 高速 35% / 中等 20% / 静态 10%：VSA 保留 tile 百分比，越高细节损失越小 |
+| `ladder` | STRING | `999,749,500,250`（FastH3 v0.2 训练 4 步阶梯，勿改） |
+| `ref_length` | INT | `clip_seconds × 24`（24fps 帧数），控制单段长度 |
+
+**接线方式**（极速版示例工作流已接好）：
+```
+MotionFix.vsa_enabled          → BSAIFastH3NativeVSA.enabled
+MotionFix.video_keep_percent   → BSAIFastH3NativeVSA.video_keep_percent
+MotionFix.ladder               → BSAIFastH3Timesteps.ladder
+MotionFix.ref_length           → MiniMaxH3ReferenceToVideo.length
+```
+
+> ⚠️ 为什么之前"加了没起作用"：旧版 MotionFix 只输出建议文本，**不会自动改任何生成参数**。
+> 画面噪点/毛刺/拖影在 4-step VSA 极速链路的主因是 **VSA 稀疏注意力丢细节**（keep=10%），
+> 升级版把它**自动关掉/调高** + 控制片段长度，才是真正生效的修复路径。
 
 ## 核心结论（2026-08-31 全网交叉核验）
 
@@ -76,7 +99,7 @@ git clone https://github.com/xm6018924/BSAI-H3-MotionFix BSAI-H3-MotionFix
 
 | 文件 | 说明 |
 | --- | --- |
-| `workflows/BSAI_FastH3_4step_VSA极速文生+图生+多参生视频 (VSA稀疏注意力)+H3-upscale-4K+MotionFix修复集成版 v1.2.json` | **极速版集成示例**：BSAI-FastH3 4-step VSA 极速文生/图生/多参生视频 + H3-upscale-4K 超分 + MotionFix 修复向导（针对高速动作 4 步必出拖影给出步数/注意力/权重/负向词建议，负向词已自动接入 CLIPTextEncode），可直接运行 |
+| `workflows/BSAI_FastH3_4step_VSA极速文生+图生+多参生视频 (VSA稀疏注意力)+H3-upscale-4K+MotionFix修复集成版 v1.2.json` | **极速版集成示例**：BSAI-FastH3 4-step VSA 极速文生/图生/多参生视频 + H3-upscale-4K 超分 + MotionFix 修复向导。**MotionFix 已自动驱动 VSA.enabled / video_keep_percent / ladder / ref_length**（改运动等级即自动应用），负向词已自动接入 CLIPTextEncode + 显示节点，可直接运行 |
 | `workflows/BSAI H3 高速运动毛刺噪点修复应用工作流.json` | **应用示例**：完整 H3 生成链 + MotionFix 节点；`negative_prompt` 已自动接入 CLIPTextEncode 生成大动态负向 CONDITIONING，附应用映射说明 Note |
 | `workflows/BSAI H3 高速运动毛刺噪点修复工作流 v1.0.json` | 简洁版：MotionFix 节点 + 完整 H3 生成链 |
 

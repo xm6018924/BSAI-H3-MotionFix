@@ -57,11 +57,25 @@ function buildPlan(motion, turbo, refW, seconds, attention, baseNeg) {
     "· 分块超分注意接缝与时间闪烁：正常速度播放两遍再逐帧验眼/嘴/发际线",
   ];
 
+  // 7. FastH3 蒸馏模型驱动配置（自动接入 BSAI-FastH3 极速链路）
+  let vsa, keep, ladder = "999,749,500,250", len;
+  if (fast) { vsa = "关（Dense 注意力，防边缘虚影/毛刺）"; keep = "35%"; }
+  else if (med) { vsa = "开"; keep = "20%"; }
+  else { vsa = "开"; keep = "10%"; }
+  len = Math.max(5, Math.round((Number(seconds) || 8) * 24));
+  let drive = [
+    "· vsa_enabled = " + vsa,
+    "· video_keep_percent = " + keep + "（VSA 保留 tile 百分比，越高细节损失越小）",
+    "· ladder = " + ladder + "（FastH3 v0.2 训练 4 步阶梯，勿改）",
+    "· ref_length = " + len + "（" + (Number(seconds) || 8) + "s @ 24fps）→ 连 ReferenceToVideo/ImageToVideo.length",
+  ];
+
   return [
     "═══ 推荐步数 ═══\n" + steps,
     "\n═══ 注意力方案 ═══\n" + attAdvice,
     "\n═══ 参考权重 ═══\n" + rwAdvice,
     "\n═══ 大动态负向词 ═══\n" + neg,
+    "\n═══ FastH3 驱动配置 ═══\n" + drive.join("\n"),
     "\n═══ 执行清单 ═══\n" + checklist.join("\n"),
     "\n═══ 后处理 ═══\n" + post.join("\n"),
   ].join("\n");
