@@ -100,8 +100,8 @@ git clone https://github.com/xm6018924/BSAI-H3-MotionFix BSAI-H3-MotionFix
 | 文件 | 说明 |
 | --- | --- |
 | `workflows/BSAI_FastH3_4step_VSA极速文生+图生+多参生视频 (VSA稀疏注意力)+H3-upscale-4K+MotionFix修复集成版 v1.2.json` | **极速版集成示例**：BSAI-FastH3 4-step VSA 极速文生/图生/多参生视频 + H3-upscale-4K 超分 + MotionFix 修复向导。**MotionFix 已自动驱动 VSA.enabled / video_keep_percent / ladder / ref_length**（改运动等级即自动应用），负向词已自动接入 CLIPTextEncode + 显示节点，可直接运行 |
-| `workflows/BSAI H3 高速运动毛刺噪点修复应用工作流.json` | **应用示例**：完整 H3 生成链 + MotionFix 节点；`negative_prompt` 已自动接入 CLIPTextEncode 生成大动态负向 CONDITIONING，附应用映射说明 Note |
-| `workflows/BSAI H3 高速运动毛刺噪点修复工作流 v1.0.json` | 简洁版：MotionFix 节点 + 完整 H3 生成链 |
+| `workflows/BSAI H3 高速运动毛刺噪点修复应用工作流.json` | **应用示例**：完整 v2.0 H3 生成链 + MotionFix 节点。`negative_prompt` 已自动接入 CLIPTextEncode + 显示节点，`ref_length` 已接入 ReferenceToVideo / ImageToVideo 的 length（v2.0 原生链无 VSA/ladder 节点，故 vsa_enabled / ladder 输出悬空，仅 FastH3 链路生效），附应用映射说明 Note |
+| `workflows/BSAI H3 高速运动毛刺噪点修复工作流 v1.0.json` | 简洁版：MotionFix 节点 + 完整 v2.0 H3 生成链。已补 CLIPTextEncode（负向词接入）+ 显示节点 + `ref_length` 接入两个 length |
 
 （前端工作流目录 `ComfyUI/user/default/workflows/` 也各存一份，可直接从工作流菜单加载。）
 

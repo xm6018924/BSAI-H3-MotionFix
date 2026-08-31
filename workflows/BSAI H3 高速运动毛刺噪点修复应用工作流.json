@@ -1,8 +1,8 @@
 {
   "id": "03be4f9e-fb8e-4775-9e8f-ff2e03154e15",
   "revision": 0,
-  "last_node_id": 56,
-  "last_link_id": 74,
+  "last_node_id": 57,
+  "last_link_id": 80,
   "nodes": [
     {
       "id": 2,
@@ -95,7 +95,7 @@
         78
       ],
       "flags": {},
-      "order": 37,
+      "order": 38,
       "mode": 0,
       "inputs": [
         {
@@ -210,7 +210,7 @@
       "flags": {
         "disabled": false
       },
-      "order": 20,
+      "order": 19,
       "mode": 0,
       "inputs": [
         {
@@ -270,7 +270,7 @@
       "flags": {
         "disabled": false
       },
-      "order": 25,
+      "order": 26,
       "mode": 0,
       "inputs": [
         {
@@ -330,7 +330,7 @@
       "flags": {
         "disabled": false
       },
-      "order": 24,
+      "order": 25,
       "mode": 0,
       "inputs": [
         {
@@ -401,7 +401,7 @@
       "flags": {
         "disabled": false
       },
-      "order": 26,
+      "order": 27,
       "mode": 0,
       "inputs": [
         {
@@ -470,7 +470,7 @@
         279.1343748420885
       ],
       "flags": {},
-      "order": 28,
+      "order": 29,
       "mode": 0,
       "inputs": [
         {
@@ -794,7 +794,7 @@
         78
       ],
       "flags": {},
-      "order": 36,
+      "order": 37,
       "mode": 0,
       "inputs": [
         {
@@ -1098,7 +1098,7 @@
         824
       ],
       "flags": {},
-      "order": 39,
+      "order": 40,
       "mode": 0,
       "inputs": [
         {
@@ -1296,7 +1296,7 @@
         200
       ],
       "flags": {},
-      "order": 10,
+      "order": 24,
       "mode": 0,
       "inputs": [
         {
@@ -1306,7 +1306,7 @@
           "widget": {
             "name": "编辑文本"
           },
-          "link": null
+          "link": 79
         }
       ],
       "outputs": [
@@ -1342,7 +1342,7 @@
         810.0417287424162
       ],
       "flags": {},
-      "order": 22,
+      "order": 21,
       "mode": 0,
       "inputs": [
         {
@@ -1385,7 +1385,7 @@
         266
       ],
       "flags": {},
-      "order": 27,
+      "order": 28,
       "mode": 0,
       "inputs": [
         {
@@ -1561,7 +1561,7 @@
         384
       ],
       "flags": {},
-      "order": 29,
+      "order": 30,
       "mode": 0,
       "inputs": [
         {
@@ -1669,7 +1669,7 @@
           "widget": {
             "name": "length"
           },
-          "link": 27
+          "link": 77
         },
         {
           "label": "ref_image_size",
@@ -1749,7 +1749,7 @@
       "flags": {
         "disabled": false
       },
-      "order": 23,
+      "order": 22,
       "mode": 4,
       "inputs": [
         {
@@ -1812,7 +1812,7 @@
           "widget": {
             "name": "length"
           },
-          "link": 59
+          "link": 78
         }
       ],
       "outputs": [
@@ -1868,7 +1868,7 @@
         70
       ],
       "flags": {},
-      "order": 11,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
@@ -1925,7 +1925,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 21,
+      "order": 20,
       "mode": 0,
       "inputs": [
         {
@@ -1966,10 +1966,7 @@
           "localized_name": "整数",
           "name": "INT",
           "type": "INT",
-          "links": [
-            27,
-            59
-          ]
+          "links": []
         },
         {
           "label": "BOOL",
@@ -2008,7 +2005,7 @@
         498
       ],
       "flags": {},
-      "order": 12,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
@@ -2119,7 +2116,7 @@
         518.406543718252
       ],
       "flags": {},
-      "order": 13,
+      "order": 12,
       "mode": 0,
       "inputs": [
         {
@@ -2185,7 +2182,7 @@
         326
       ],
       "flags": {},
-      "order": 14,
+      "order": 13,
       "mode": 0,
       "inputs": [
         {
@@ -2251,7 +2248,7 @@
         126
       ],
       "flags": {},
-      "order": 15,
+      "order": 14,
       "mode": 0,
       "showAdvanced": true,
       "inputs": [
@@ -2343,7 +2340,7 @@
         500
       ],
       "flags": {},
-      "order": 38,
+      "order": 39,
       "mode": 0,
       "inputs": [
         {
@@ -2585,7 +2582,7 @@
         70
       ],
       "flags": {},
-      "order": 30,
+      "order": 31,
       "mode": 0,
       "inputs": [
         {
@@ -2638,7 +2635,7 @@
         330
       ],
       "flags": {},
-      "order": 31,
+      "order": 32,
       "mode": 0,
       "inputs": [
         {
@@ -2721,7 +2718,7 @@
         26
       ],
       "flags": {},
-      "order": 19,
+      "order": 18,
       "mode": 0,
       "inputs": [
         {
@@ -2759,7 +2756,7 @@
         70
       ],
       "flags": {},
-      "order": 32,
+      "order": 33,
       "mode": 0,
       "inputs": [
         {
@@ -2813,7 +2810,7 @@
         70
       ],
       "flags": {},
-      "order": 33,
+      "order": 34,
       "mode": 0,
       "inputs": [
         {
@@ -2867,7 +2864,7 @@
         126
       ],
       "flags": {},
-      "order": 34,
+      "order": 35,
       "mode": 0,
       "inputs": [
         {
@@ -2962,7 +2959,7 @@
         106
       ],
       "flags": {},
-      "order": 35,
+      "order": 36,
       "mode": 0,
       "inputs": [
         {
@@ -3046,7 +3043,131 @@
       }
     },
     {
-      "id": 53,
+      "id": 54,
+      "type": "CLIPTextEncode",
+      "pos": [
+        -180,
+        1480
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 23,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "clip",
+          "name": "clip",
+          "type": "CLIP",
+          "link": 74
+        },
+        {
+          "localized_name": "文本",
+          "name": "text",
+          "type": "STRING",
+          "widget": {
+            "name": "text"
+          },
+          "link": 75
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "条件",
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "widgets_values_named": {
+        "text": ""
+      }
+    },
+    {
+      "id": 55,
+      "type": "Note",
+      "pos": [
+        -180,
+        1800
+      ],
+      "size": [
+        251.3013671875,
+        88
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "BSAI H3 MotionFix 应用映射说明",
+      "properties": {},
+      "widgets_values": [
+        "BSAI H3 MotionFix 应用映射说明\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n1. 本节点为「高速动作毛刺/噪点修复向导」，纯规则引擎零显存。\n   节点面板内实时显示完整修复方案卡（步数/注意力/权重/负向词/清单/后处理）。\n2. negative_prompt 已自动接入右侧 CLIPTextEncode，生成大动态负向 CONDITIONING\n   （H3 采样需负向 CFG 时，可把该 CONDITIONING 经 ConditioningConcat 并入正向；\n    或直接复制节点方案卡中的负向词文本到需要负向的模型）。\n3. recommended_steps（推荐步数）：\n   · 关闭 Turbo 回原生 20–24 步 → 参考 MiniMaxH3PDDAccApply.nfe\n   · 若用 ACC-8步 LoRA，至少提高到 8 步（勿用 4 步，必出拖影/残影）\n4. ref_weight_advice（参考权重）：填到 ReferenceToVideo 参考强度（大姿态 0.78–0.82）\n5. clip_seconds（片段时长）：填到 length / 单次生成 ≤8–15 秒拆段\n6. checklist / post_process：逐项执行；后处理用 LTX2.5 二次采样 + SeedVR2/FlashVSR/Topaz 超分"
+      ],
+      "widgets_values_named": {
+        "text": "BSAI H3 MotionFix 应用映射说明\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n1. 本节点为「高速动作毛刺/噪点修复向导」，纯规则引擎零显存。\n   节点面板内实时显示完整修复方案卡（步数/注意力/权重/负向词/清单/后处理）。\n2. negative_prompt 已自动接入右侧 CLIPTextEncode，生成大动态负向 CONDITIONING\n   （H3 采样需负向 CFG 时，可把该 CONDITIONING 经 ConditioningConcat 并入正向；\n    或直接复制节点方案卡中的负向词文本到需要负向的模型）。\n3. recommended_steps（推荐步数）：\n   · 关闭 Turbo 回原生 20–24 步 → 参考 MiniMaxH3PDDAccApply.nfe\n   · 若用 ACC-8步 LoRA，至少提高到 8 步（勿用 4 步，必出拖影/残影）\n4. ref_weight_advice（参考权重）：填到 ReferenceToVideo 参考强度（大姿态 0.78–0.82）\n5. clip_seconds（片段时长）：填到 length / 单次生成 ≤8–15 秒拆段\n6. checklist / post_process：逐项执行；后处理用 LTX2.5 二次采样 + SeedVR2/FlashVSR/Topaz 超分"
+      },
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 56,
+      "type": "MuyeTextEditOutput",
+      "pos": [
+        -210,
+        1560
+      ],
+      "size": [
+        360,
+        140
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "编辑文本",
+          "name": "编辑文本",
+          "type": "STRING",
+          "widget": {
+            "name": "编辑文本"
+          },
+          "link": 80
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "文本",
+          "name": "文本",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "aux_id": "muyexiuluo/ComfyUI_Muye",
+        "ver": "9057aa8e1dddcef183e33565923d3d8d0f2b63a3",
+        "Node name for S&R": "MuyeTextEditOutput"
+      },
+      "widgets_values": [
+        "大动态负向词（由 MotionFix.negative_prompt 提供，Queue 后显示/可复制）"
+      ],
+      "widgets_values_named": {
+        "编辑文本": "大动态负向词（由 MotionFix.negative_prompt 提供，Queue 后显示/可复制）"
+      }
+    },
+    {
+      "id": 57,
       "type": "BSAI_H3_MotionFix",
       "pos": [
         -700,
@@ -3054,10 +3175,10 @@
       ],
       "size": [
         400,
-        332
+        412
       ],
       "flags": {},
-      "order": 16,
+      "order": 17,
       "mode": 0,
       "inputs": [
         {
@@ -3140,8 +3261,9 @@
           "name": "negative_prompt",
           "type": "STRING",
           "links": [
-            73,
-            78
+            75,
+            79,
+            80
           ]
         },
         {
@@ -3155,9 +3277,38 @@
           "name": "post_process",
           "type": "STRING",
           "links": null
+        },
+        {
+          "localized_name": "vsa_enabled",
+          "name": "vsa_enabled",
+          "type": "BOOLEAN",
+          "links": null
+        },
+        {
+          "localized_name": "video_keep_percent",
+          "name": "video_keep_percent",
+          "type": "FLOAT",
+          "links": null
+        },
+        {
+          "localized_name": "ladder",
+          "name": "ladder",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "localized_name": "ref_length",
+          "name": "ref_length",
+          "type": "INT",
+          "links": [
+            77,
+            78
+          ]
         }
       ],
       "properties": {
+        "aux_id": "xm6018924/BSAI-H3-MotionFix",
+        "ver": "2d3f03526410a4482d6c001865f764b38e6ed683",
         "Node name for S&R": "BSAI_H3_MotionFix"
       },
       "widgets_values": [
@@ -3167,7 +3318,7 @@
         8,
         "kitchen_attention",
         "",
-        "═══ 推荐步数 ═══\n关闭 Turbo，原生 20–24 步\n\n═══ 注意力方案 ═══\nKitchen Attention 正确选择（动作镜头稳定，无撕裂）\n\n═══ 参考权重 ═══\n0.78–0.82（大姿态/转头/出拳，高权重会拉扯五官）（当前 0.85）\n\n═══ 大动态负向词 ═══\nclip 负面: 五官扭曲, 肢体穿模, 画面闪烁, 乱码文字, 画风突变, 肢体畸形, 手部崩坏, 画面撕裂\n\n═══ 执行清单 ═══\n① 拆段：单次生成 ≤8–15 秒（当前 8s → 建议再拆短），帧数砍半最直接\n② 固定 seed + 用上一段结尾画面做参考首帧，分段接力生成\n③ 动作镜头单独拆细；后期拼接处留 2–3 帧重叠，不硬切\n④ 分辨率降一档（优先原生 1344×768），找稳定区间\n⑤ 若加速后仍闪烁/颜色跳动：成片关掉全部加速重跑一版对比\n\n═══ 后处理 ═══\n· LTX2.5 二次采样放大（≈0.45 降噪）→ 修复动作镜头脸部模糊/残影\n· SeedVR2 / FlashVSR / Topaz 超分 → 768P 母片提至 1080P/4K\n· ComfyUI-Spectrum-MiniMax-H3：ER-SDE forecast 污染修复 + offline smoothing 去时序闪烁\n· 分块超分注意接缝与时间闪烁：正常速度播放两遍再逐帧验眼/嘴/发际线"
+        "═══ 推荐步数 ═══\n关闭 Turbo，原生 20–24 步\n\n═══ 注意力方案 ═══\nKitchen Attention 正确选择（动作镜头稳定，无撕裂）\n\n═══ 参考权重 ═══\n0.78–0.82（大姿态/转头/出拳，高权重会拉扯五官）（当前 0.85）\n\n═══ 大动态负向词 ═══\nclip 负面: 五官扭曲, 肢体穿模, 画面闪烁, 乱码文字, 画风突变, 肢体畸形, 手部崩坏, 画面撕裂\n\n═══ FastH3 驱动配置 ═══\n· vsa_enabled = 关（Dense 注意力，防边缘虚影/毛刺）\n· video_keep_percent = 35%（VSA 保留 tile 百分比，越高细节损失越小）\n· ladder = 999,749,500,250（FastH3 v0.2 训练 4 步阶梯，勿改）\n· ref_length = 192（8s @ 24fps）→ 连 ReferenceToVideo/ImageToVideo.length\n\n═══ 执行清单 ═══\n① 拆段：单次生成 ≤8–15 秒（当前 8s → 建议再拆短），帧数砍半最直接\n② 固定 seed + 用上一段结尾画面做参考首帧，分段接力生成\n③ 动作镜头单独拆细；后期拼接处留 2–3 帧重叠，不硬切\n④ 分辨率降一档（优先原生 1344×768），找稳定区间\n⑤ 若加速后仍闪烁/颜色跳动：成片关掉全部加速重跑一版对比\n\n═══ 后处理 ═══\n· LTX2.5 二次采样放大（≈0.45 降噪）→ 修复动作镜头脸部模糊/残影\n· SeedVR2 / FlashVSR / Topaz 超分 → 768P 母片提至 1080P/4K\n· ComfyUI-Spectrum-MiniMax-H3：ER-SDE forecast 污染修复 + offline smoothing 去时序闪烁\n· 分块超分注意接缝与时间闪烁：正常速度播放两遍再逐帧验眼/嘴/发际线"
       ],
       "widgets_values_named": {
         "motion_level": "fast_action 高速动作/打斗 (出拳/奔跑/转身)",
@@ -3176,123 +3327,8 @@
         "clip_seconds": 8,
         "attention": "kitchen_attention",
         "base_negative": "",
-        "修复方案 (实时)": "═══ 推荐步数 ═══\n关闭 Turbo，原生 20–24 步\n\n═══ 注意力方案 ═══\nKitchen Attention 正确选择（动作镜头稳定，无撕裂）\n\n═══ 参考权重 ═══\n0.78–0.82（大姿态/转头/出拳，高权重会拉扯五官）（当前 0.85）\n\n═══ 大动态负向词 ═══\nclip 负面: 五官扭曲, 肢体穿模, 画面闪烁, 乱码文字, 画风突变, 肢体畸形, 手部崩坏, 画面撕裂\n\n═══ 执行清单 ═══\n① 拆段：单次生成 ≤8–15 秒（当前 8s → 建议再拆短），帧数砍半最直接\n② 固定 seed + 用上一段结尾画面做参考首帧，分段接力生成\n③ 动作镜头单独拆细；后期拼接处留 2–3 帧重叠，不硬切\n④ 分辨率降一档（优先原生 1344×768），找稳定区间\n⑤ 若加速后仍闪烁/颜色跳动：成片关掉全部加速重跑一版对比\n\n═══ 后处理 ═══\n· LTX2.5 二次采样放大（≈0.45 降噪）→ 修复动作镜头脸部模糊/残影\n· SeedVR2 / FlashVSR / Topaz 超分 → 768P 母片提至 1080P/4K\n· ComfyUI-Spectrum-MiniMax-H3：ER-SDE forecast 污染修复 + offline smoothing 去时序闪烁\n· 分块超分注意接缝与时间闪烁：正常速度播放两遍再逐帧验眼/嘴/发际线"
+        "修复方案 (实时)": "═══ 推荐步数 ═══\n关闭 Turbo，原生 20–24 步\n\n═══ 注意力方案 ═══\nKitchen Attention 正确选择（动作镜头稳定，无撕裂）\n\n═══ 参考权重 ═══\n0.78–0.82（大姿态/转头/出拳，高权重会拉扯五官）（当前 0.85）\n\n═══ 大动态负向词 ═══\nclip 负面: 五官扭曲, 肢体穿模, 画面闪烁, 乱码文字, 画风突变, 肢体畸形, 手部崩坏, 画面撕裂\n\n═══ FastH3 驱动配置 ═══\n· vsa_enabled = 关（Dense 注意力，防边缘虚影/毛刺）\n· video_keep_percent = 35%（VSA 保留 tile 百分比，越高细节损失越小）\n· ladder = 999,749,500,250（FastH3 v0.2 训练 4 步阶梯，勿改）\n· ref_length = 192（8s @ 24fps）→ 连 ReferenceToVideo/ImageToVideo.length\n\n═══ 执行清单 ═══\n① 拆段：单次生成 ≤8–15 秒（当前 8s → 建议再拆短），帧数砍半最直接\n② 固定 seed + 用上一段结尾画面做参考首帧，分段接力生成\n③ 动作镜头单独拆细；后期拼接处留 2–3 帧重叠，不硬切\n④ 分辨率降一档（优先原生 1344×768），找稳定区间\n⑤ 若加速后仍闪烁/颜色跳动：成片关掉全部加速重跑一版对比\n\n═══ 后处理 ═══\n· LTX2.5 二次采样放大（≈0.45 降噪）→ 修复动作镜头脸部模糊/残影\n· SeedVR2 / FlashVSR / Topaz 超分 → 768P 母片提至 1080P/4K\n· ComfyUI-Spectrum-MiniMax-H3：ER-SDE forecast 污染修复 + offline smoothing 去时序闪烁\n· 分块超分注意接缝与时间闪烁：正常速度播放两遍再逐帧验眼/嘴/发际线"
       }
-    },
-    {
-      "id": 54,
-      "type": "CLIPTextEncode",
-      "pos": [
-        -180,
-        1480
-      ],
-      "size": [
-        400,
-        200
-      ],
-      "flags": {},
-      "order": 17,
-      "mode": 0,
-      "inputs": [
-        {
-          "localized_name": "clip",
-          "name": "clip",
-          "type": "CLIP",
-          "link": 74
-        },
-        {
-          "localized_name": "文本",
-          "name": "text",
-          "type": "STRING",
-          "widget": {
-            "name": "text"
-          },
-          "link": 73
-        }
-      ],
-      "outputs": [
-        {
-          "localized_name": "条件",
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": null
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.34.0",
-        "Node name for S&R": "CLIPTextEncode"
-      },
-      "widgets_values": [
-        ""
-      ],
-      "widgets_values_named": {
-        "text": ""
-      }
-    },
-    {
-      "id": 55,
-      "type": "Note",
-      "pos": [
-        -180,
-        1800
-      ],
-      "size": [
-        140,
-        60
-      ],
-      "flags": {},
-      "order": 18,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "BSAI H3 MotionFix 应用映射说明",
-      "properties": {},
-      "widgets_values": [
-        "BSAI H3 MotionFix 应用映射说明\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n1. 本节点为「高速动作毛刺/噪点修复向导」，纯规则引擎零显存。\n   节点面板内实时显示完整修复方案卡（步数/注意力/权重/负向词/清单/后处理）。\n2. negative_prompt 已自动接入右侧 CLIPTextEncode，生成大动态负向 CONDITIONING\n   （H3 采样需负向 CFG 时，可把该 CONDITIONING 经 ConditioningConcat 并入正向；\n    或直接复制节点方案卡中的负向词文本到需要负向的模型）。\n3. recommended_steps（推荐步数）：\n   · 关闭 Turbo 回原生 20–24 步 → 参考 MiniMaxH3PDDAccApply.nfe\n   · 若用 ACC-8步 LoRA，至少提高到 8 步（勿用 4 步，必出拖影/残影）\n4. ref_weight_advice（参考权重）：填到 ReferenceToVideo 参考强度（大姿态 0.78–0.82）\n5. clip_seconds（片段时长）：填到 length / 单次生成 ≤8–15 秒拆段\n6. checklist / post_process：逐项执行；后处理用 LTX2.5 二次采样 + SeedVR2/FlashVSR/Topaz 超分"
-      ],
-      "widgets_values_named": {
-        "text": "BSAI H3 MotionFix 应用映射说明\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n1. 本节点为「高速动作毛刺/噪点修复向导」，纯规则引擎零显存。\n   节点面板内实时显示完整修复方案卡（步数/注意力/权重/负向词/清单/后处理）。\n2. negative_prompt 已自动接入右侧 CLIPTextEncode，生成大动态负向 CONDITIONING\n   （H3 采样需负向 CFG 时，可把该 CONDITIONING 经 ConditioningConcat 并入正向；\n    或直接复制节点方案卡中的负向词文本到需要负向的模型）。\n3. recommended_steps（推荐步数）：\n   · 关闭 Turbo 回原生 20–24 步 → 参考 MiniMaxH3PDDAccApply.nfe\n   · 若用 ACC-8步 LoRA，至少提高到 8 步（勿用 4 步，必出拖影/残影）\n4. ref_weight_advice（参考权重）：填到 ReferenceToVideo 参考强度（大姿态 0.78–0.82）\n5. clip_seconds（片段时长）：填到 length / 单次生成 ≤8–15 秒拆段\n6. checklist / post_process：逐项执行；后处理用 LTX2.5 二次采样 + SeedVR2/FlashVSR/Topaz 超分"
-      },
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 56,
-      "type": "MuyeTextEditOutput",
-      "pos": [
-        -210,
-        1560
-      ],
-      "size": [
-        360,
-        140
-      ],
-      "flags": {},
-      "order": 40,
-      "mode": 0,
-      "inputs": [
-        {
-          "localized_name": "编辑文本",
-          "name": "编辑文本",
-          "type": "STRING",
-          "link": 78
-        }
-      ],
-      "outputs": [
-        {
-          "localized_name": "文本",
-          "name": "文本",
-          "type": "STRING",
-          "links": null
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "MuyeTextEditOutput"
-      },
-      "widgets_values": [
-        "大动态负向词（由 MotionFix.negative_prompt 提供，Queue 后显示/可复制）"
-      ]
     }
   ],
   "links": [
@@ -3415,14 +3451,6 @@
       20,
       0,
       "FLOAT"
-    ],
-    [
-      27,
-      20,
-      1,
-      7,
-      12,
-      "INT"
     ],
     [
       35,
@@ -3585,14 +3613,6 @@
       "INT"
     ],
     [
-      59,
-      20,
-      1,
-      34,
-      7,
-      "INT"
-    ],
-    [
       65,
       10,
       0,
@@ -3642,27 +3662,19 @@
     ],
     [
       75,
-      29,
-      0,
-      7,
+      57,
       3,
-      "IMAGE"
-    ],
-    [
-      76,
-      30,
-      0,
-      7,
-      4,
-      "IMAGE"
+      54,
+      1,
+      "STRING"
     ],
     [
       77,
-      29,
-      0,
-      34,
+      57,
+      9,
+      7,
       2,
-      "IMAGE"
+      "INT"
     ],
     [
       71,
@@ -3681,14 +3693,6 @@
       "INT"
     ],
     [
-      73,
-      53,
-      3,
-      54,
-      1,
-      "STRING"
-    ],
-    [
       74,
       2,
       0,
@@ -3698,7 +3702,23 @@
     ],
     [
       78,
-      53,
+      57,
+      9,
+      34,
+      7,
+      "INT"
+    ],
+    [
+      79,
+      57,
+      3,
+      51,
+      0,
+      "STRING"
+    ],
+    [
+      80,
+      57,
       3,
       56,
       0,
