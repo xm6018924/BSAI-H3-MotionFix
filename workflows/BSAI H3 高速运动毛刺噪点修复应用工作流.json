@@ -1,7 +1,7 @@
 {
   "id": "03be4f9e-fb8e-4775-9e8f-ff2e03154e15",
   "revision": 0,
-  "last_node_id": 55,
+  "last_node_id": 56,
   "last_link_id": 74,
   "nodes": [
     {
@@ -3140,7 +3140,8 @@
           "name": "negative_prompt",
           "type": "STRING",
           "links": [
-            73
+            73,
+            78
           ]
         },
         {
@@ -3255,6 +3256,43 @@
       },
       "color": "#432",
       "bgcolor": "#653"
+    },
+    {
+      "id": 56,
+      "type": "MuyeTextEditOutput",
+      "pos": [
+        -210,
+        1560
+      ],
+      "size": [
+        360,
+        140
+      ],
+      "flags": {},
+      "order": 40,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "编辑文本",
+          "name": "编辑文本",
+          "type": "STRING",
+          "link": 78
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "文本",
+          "name": "文本",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MuyeTextEditOutput"
+      },
+      "widgets_values": [
+        "大动态负向词（由 MotionFix.negative_prompt 提供，Queue 后显示/可复制）"
+      ]
     }
   ],
   "links": [
@@ -3657,6 +3695,14 @@
       54,
       0,
       "CLIP"
+    ],
+    [
+      78,
+      53,
+      3,
+      56,
+      0,
+      "STRING"
     ]
   ],
   "groups": [
