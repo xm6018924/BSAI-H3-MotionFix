@@ -119,13 +119,14 @@ class BSAI_H3_MotionFix:
         # ── 检查清单 ──
         if level == "fast":
             checklist = (
-                "① 拆段：单次生成 ≤8–15 秒（当前 %.0f 秒%s），帧数砍半最直接\n"
-                "② 固定 seed + 用上一段结尾画面做参考首帧，分段接力生成\n"
-                "③ 动作镜头单独拆细；后期拼接处留 2–3 帧重叠，不硬切\n"
-                "④ 分辨率降一档（优先原生 1344×768），找稳定区间\n"
-                "⑤ 若加速后仍闪烁/颜色跳动：成片关掉全部加速重跑一版对比\n"
-                "⑥ 高权重 + 大动作=双重约束拉扯 → 按上方权重下调") % (clip_seconds,
-                "（已拆段）" if clip_seconds <= 15 else " → 建议再拆短")
+                "① 拆段：单次生成 ≤5 秒（当前 %.0f 秒%s），帧数再砍半最直接\n"
+                "② 分辨率降到 0.5MP 档（16:9→960×544 / 竖屏→768×1344）："
+                "4-step 蒸馏模型在 1MP 高速动作必然毛刺，降一档最有效\n"
+                "③ 固定 seed + 用上一段结尾画面做参考首帧，分段接力生成\n"
+                "④ 动作镜头单独拆细；后期拼接处留 2–3 帧重叠，不硬切\n"
+                "⑤ 若仍毛刺/闪烁：成片关掉全部加速（VSA/Sage/Turbo）重跑一版对比\n"
+                "⑥ 高权重 + 大动作=双重约束拉扯 → 参考权重下调到 0.78–0.82") % (clip_seconds,
+                "（已拆段）" if clip_seconds <= 5 else " → 建议再拆短")
         elif level == "medium":
             checklist = (
                 "① 单次生成 ≤15 秒；固定 seed 分段接力\n"
@@ -141,8 +142,10 @@ class BSAI_H3_MotionFix:
         # ── 后处理 ──
         post = (
             "成片后处理（修残影/模糊/噪点）：\n"
+            "  · FlashVSR_Ultra_Fast 视频超分（逐帧去噪 + 时间一致性）→ "
+            "本链路最适配的毛刺/噪点修复（也可用 BSAI-H3-upscale-4K 的 Topaz/FlashVSR 档）\n"
             "  · LTX2.5 二次采样放大（≈0.45 降噪）→ 修复动作镜头脸部模糊/残影\n"
-            "  · SeedVR2 / FlashVSR / Topaz 超分 → 768P 母片提至 1080P/4K\n"
+            "  · SeedVR2 / Topaz 超分 → 768P 母片提至 1080P/4K\n"
             "  · ComfyUI-Spectrum-MiniMax-H3 → ER-SDE forecast confetti 修复 + offline\n"
             "    smoothing replay 去时序闪烁（保持 11 actual / 9 forecast 原生调度）\n"
             "  · 分块超分注意接缝与时间闪烁：正常速度播放两遍再逐帧验眼/嘴/发际线")
