@@ -76,7 +76,8 @@ git clone https://github.com/xm6018924/BSAI-H3-MotionFix BSAI-H3-MotionFix
 
 | 文件 | 说明 |
 | --- | --- |
-| `workflows/BSAI H3 高速运动毛刺噪点修复应用工作流.json` | **应用示例（推荐）**：完整 H3 生成链 + MotionFix 节点；`negative_prompt` 已自动接入 CLIPTextEncode 生成大动态负向 CONDITIONING，附应用映射说明 Note |
+| `workflows/BSAI_FastH3_4step_VSA极速文生+图生+多参生视频 (VSA稀疏注意力)+H3-upscale-4K+MotionFix修复集成版 v1.2.json` | **极速版集成示例**：BSAI-FastH3 4-step VSA 极速文生/图生/多参生视频 + H3-upscale-4K 超分 + MotionFix 修复向导（针对高速动作 4 步必出拖影给出步数/注意力/权重/负向词建议，负向词已自动接入 CLIPTextEncode），可直接运行 |
+| `workflows/BSAI H3 高速运动毛刺噪点修复应用工作流.json` | **应用示例**：完整 H3 生成链 + MotionFix 节点；`negative_prompt` 已自动接入 CLIPTextEncode 生成大动态负向 CONDITIONING，附应用映射说明 Note |
 | `workflows/BSAI H3 高速运动毛刺噪点修复工作流 v1.0.json` | 简洁版：MotionFix 节点 + 完整 H3 生成链 |
 
 （前端工作流目录 `ComfyUI/user/default/workflows/` 也各存一份，可直接从工作流菜单加载。）
