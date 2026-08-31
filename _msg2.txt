@@ -1,0 +1,3 @@
+feat(workflows): 新增官方 FastH3 VSA 极速模板 + MotionFix 全驱动接线示例工作流 v1.0
+
+以 BSAI-FastH3 官方 4-step VSA 模板为底，MotionFix 4 个驱动输出全部接线（vsa_enabled→VSA.enabled、video_keep_percent→VSA.video_keep_percent、ladder→Timesteps.ladder、ref_length→RefToVideo/I2V.length）。依赖 BSAI-ComfyUI-FastH3 nodes forceInput。README 更新示例表格。

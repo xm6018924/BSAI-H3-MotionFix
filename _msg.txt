@@ -1,1 +1,0 @@
-fix(v3.0): 补全 MotionFix 负向词显示链路 —— ShowText 由孤儿连接改为接 MotionFix.negative_prompt(link 78)；ref_images 保持 LoadImage IMAGE 来源(STRING validate 错误已消除)；两个显示节点(MuyeTextEditOutput+ShowText)均展示大动态负向词
