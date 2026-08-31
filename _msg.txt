@@ -1,3 +1,1 @@
-fix(v1.2集成版): 消除快速动作磨砂玻璃
-
-超分 scale 4x->2x(低清母片4倍放大的涂抹是磨砂主因)；VSA.enabled=False+keep=35(显示同步，Dense防涂抹)；MotionFix ref_weight 0.85->0.80、clip_seconds 8->5(拆短快速动作段，ref_length->120)
+fix(v3.0): 修复 ReferenceToVideo ref_images 误接 MotionFix.negative_prompt(STRING) 导致的 validate 报错 —— 断开错误连接，ref_image_0 恢复为 LoadImage(30) IMAGE 来源

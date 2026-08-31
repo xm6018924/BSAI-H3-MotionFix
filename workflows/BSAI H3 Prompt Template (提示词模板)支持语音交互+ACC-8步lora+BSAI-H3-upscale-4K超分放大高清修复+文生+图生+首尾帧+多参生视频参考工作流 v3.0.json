@@ -209,7 +209,7 @@
       "flags": {
         "disabled": false
       },
-      "order": 19,
+      "order": 18,
       "mode": 0,
       "inputs": [
         {
@@ -1296,7 +1296,7 @@
         200
       ],
       "flags": {},
-      "order": 10,
+      "order": 21,
       "mode": 0,
       "inputs": [
         {
@@ -1342,7 +1342,7 @@
         810.0417287424162
       ],
       "flags": {},
-      "order": 21,
+      "order": 22,
       "mode": 0,
       "inputs": [
         {
@@ -1563,7 +1563,7 @@
       "flags": {
         "disabled": false
       },
-      "order": 22,
+      "order": 20,
       "mode": 4,
       "inputs": [
         {
@@ -1684,7 +1684,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 20,
+      "order": 19,
       "mode": 0,
       "inputs": [
         {
@@ -2145,7 +2145,7 @@
         26
       ],
       "flags": {},
-      "order": 18,
+      "order": 17,
       "mode": 0,
       "inputs": [
         {
@@ -2481,7 +2481,7 @@
         326
       ],
       "flags": {},
-      "order": 11,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
@@ -2547,7 +2547,7 @@
         518.406543718252
       ],
       "flags": {},
-      "order": 12,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
@@ -2610,7 +2610,7 @@
       ],
       "size": [
         468.7990002630686,
-        384
+        344
       ],
       "flags": {},
       "order": 28,
@@ -2643,25 +2643,18 @@
           "name": "ref_images.ref_image_0",
           "shape": 7,
           "type": "IMAGE",
-          "link": 75
+          "link": 76
         },
         {
           "localized_name": "ref_image_1",
           "name": "ref_images.ref_image_1",
           "shape": 7,
           "type": "IMAGE",
-          "link": 76
+          "link": 73
         },
         {
           "localized_name": "ref_image_2",
           "name": "ref_images.ref_image_2",
-          "shape": 7,
-          "type": "IMAGE",
-          "link": 73
-        },
-        {
-          "localized_name": "ref_image_3",
-          "name": "ref_images.ref_image_3",
           "shape": 7,
           "type": "IMAGE",
           "link": null
@@ -2800,7 +2793,7 @@
         70
       ],
       "flags": {},
-      "order": 13,
+      "order": 12,
       "mode": 0,
       "inputs": [
         {
@@ -2855,7 +2848,7 @@
         401.6284939098002
       ],
       "flags": {},
-      "order": 14,
+      "order": 13,
       "mode": 0,
       "inputs": [
         {
@@ -2919,7 +2912,7 @@
         126
       ],
       "flags": {},
-      "order": 15,
+      "order": 14,
       "mode": 0,
       "showAdvanced": true,
       "inputs": [
@@ -3011,7 +3004,7 @@
         632
       ],
       "flags": {},
-      "order": 16,
+      "order": 15,
       "mode": 0,
       "inputs": [
         {
@@ -3121,7 +3114,7 @@
         412
       ],
       "flags": {},
-      "order": 17,
+      "order": 16,
       "mode": 0,
       "inputs": [
         {
@@ -3204,8 +3197,7 @@
           "name": "negative_prompt",
           "type": "STRING",
           "links": [
-            74,
-            75
+            74
           ]
         },
         {
@@ -3608,19 +3600,11 @@
       "AUDIO"
     ],
     [
-      75,
-      54,
-      3,
-      33,
-      0,
-      "STRING"
-    ],
-    [
       76,
       30,
       0,
       7,
-      4,
+      3,
       "IMAGE"
     ],
     [
@@ -3652,7 +3636,7 @@
       53,
       0,
       7,
-      5,
+      4,
       "IMAGE"
     ],
     [
