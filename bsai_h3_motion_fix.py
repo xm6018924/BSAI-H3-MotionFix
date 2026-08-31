@@ -174,8 +174,12 @@ class BSAI_H3_MotionFix:
             "ladder": ladder,
             "ref_length": ref_length,
         }}
+        # 注意：ComfyUI 要求 ui dict 放在返回元组【内部】（平铺），
+        # 写成 `(a,...,j), {"ui": ui}` 会变成嵌套元组，导致 output_data 长度错乱，
+        # 一旦该节点有下游连接，cache_update 的 outputs[from_socket] 必然越界(IndexError)。
         return (steps, att, rw, neg, checklist, post,
-                vsa_enabled, video_keep_percent, ladder, ref_length), {"ui": ui}
+                vsa_enabled, video_keep_percent, ladder, ref_length,
+                {"ui": ui})
 
 
 NODE_CLASS_MAPPINGS = {
