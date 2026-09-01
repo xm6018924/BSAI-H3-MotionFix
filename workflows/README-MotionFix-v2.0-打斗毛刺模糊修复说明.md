@@ -11,6 +11,7 @@
 > - **v2.6（当前推荐，帧数修复版）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.6 (慢动作重拍 4轨对比·帧数修复).json`（修复 hold map 120 vs batch 124 报错，见 5.8）
 > - **v2.7（最新，帧数修复+重拍链已启用）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.7 (慢动作重拍 4轨对比·帧数修复·重拍链启用).json`（在 v2.6 基础上启用重拍链 17 节点，加载即跑，见 5.9）
 > - **v2.8（最新，turbo 加速版）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.8 (慢动作重拍 4轨对比·turbo加速).json`（重拍二次采样 18 步 → 6 步 + turbo LoRA 加速，见 5.10）
+> - **v2.9（当前推荐，卡死修复版）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.9 (慢动作重拍 4轨对比·w4a8优化).json`（v2.8 在 24GB 卡 OOM 假死，本版用 w4a8 轻量模型 + ChunkFFN 修复，见 5.11）
 
 ---
 
@@ -257,6 +258,24 @@ H3V2VInit.LATENT + 原生 ref2va 模型 + H3InjectSchedule(simple 25步 inject 0
 **预期提速 / Expected speedup**：步数 18→6（~3x）+ er_sde 采样器更快 + 热区收紧，重拍轨预计从 ~36 分钟降到 **8–12 分钟**（~3–4x）。若仍需更快：`LoraLoaderModelOnly` 强度可提到 1.0、`H3InjectSchedule.total_steps` 可降到 4（官方 turbo 极值），或 `H3JerkOracle q` 提到 0.85。
 
 **注意 / Caveats**：turbo LoRA 会轻微改变画风/细节（LoRA 通病）；若对质量敏感，可把 `LoraLoaderModelOnly(66)` BYPA 掉，恢复 v2.7 的 25 步原生重拍（质量优先档）。
+
+---
+
+## 五.11、v2.9 卡死修复版：w4a8 轻量模型 + ChunkFFN（当前推荐）
+## 5.11. v2.9 stall fix: w4a8 lightweight model + ChunkFFN (recommended)
+
+**问题 / Problem**：v2.8 在 24GB 显卡上运行，重拍二次采样在模型初始化阶段**卡死假死**（终端日志停在 `Model Initializing ... 0/3`，UI 计时停住不再前进；ComfyUI API 无响应需重启）。根因：24GB 卡用 int8 量化 ref2va（20.97GB）+ turbo LoRA 融合，初始化阶段显存/内存耗尽 → Python 线程阻塞假死。
+
+**修复方案（v2.9，对齐官方 ref2va 样例的显存优化思路）**：
+1. **重拍模型换 w4a8 混合量化版**：`minimax_h3_ref2va_pruned_int8_convrot.safetensors`（20.97GB）→ `minimax_h3_ref2va_pruned_w4a8_mixed.safetensors`（**11.77GB，显存近半**）。w4a8 由 comfy-kitchen 原生支持（`asym_w4a8_int8` / `convrot_w4a4`），键结构兼容（208/208 匹配 turbo LoRA）。
+2. **LoRA 换官方同款**：`minimax_h3_ref2v_turbo_4step_v0.1` → `minimax_h3_fl2v_turbo_4step_v1.0_768p_comfyui_bf16.safetensors`（官方 `motion_pipeline_ref2va.json` 使用的同款，**strength 1.0**）。三款 turbo LoRA 与 w4a8/int8 模型键均 208/208 全匹配，官方同款更稳。
+3. **新增 `MiniMaxChunkFeedForward(67)`**（KJNodes）：`65(w4a8) → 67(chunks=2, seq=65536) → 66(LoRA) → 53/56`。分块前馈**降低峰值显存**（官方 ref2va 样例 302 节点同款做法，不需要 sageattention 库）。
+
+**改动链路 / New chain**：`65 UNETLoader(w4a8 11.77GB) → 67 MiniMaxChunkFeedForward → 66 LoraLoaderModelOnly(fl2v v1.0, s=1.0) → 53 BasicGuider / 56 H3InjectSchedule`
+
+**预期 / Expected**：重拍链模型显存占用 21GB → 12GB，避开 24GB 卡的 OOM 假死；6 步 beta + er_sde 提速保持（~36 分钟 → 8–12 分钟档）。**FastH3 主轨（4 步）不受影响，仍约 3 分钟。**
+
+**注意 / Caveats**：若仍显存紧张，ComfyUI 会自动把 FastH3 主轨 offload 到内存再加载 w4a8（动态 VRAM 管理），会略增重拍前等待；`MiniMaxChunkFeedForward.chunks` 可提到 3–4 进一步降峰值显存。
 
 ---
 
