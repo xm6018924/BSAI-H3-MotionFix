@@ -9,6 +9,7 @@
 > - **v2.3（最新/推荐）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.3 (慢动作重拍 4轨对比).json`（v2.2 + 内置 MAINodes 慢动作重拍链，见第五章 5.6）
 > - **v2.5（修复版，若 v2.3/v2.4 第 4 轨停跑用这个）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.5 (慢动作重拍 4轨对比·修复).json`（修复第 4 轨 model=None 停跑，见 5.7）
 > - **v2.6（当前推荐，帧数修复版）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.6 (慢动作重拍 4轨对比·帧数修复).json`（修复 hold map 120 vs batch 124 报错，见 5.8）
+> - **v2.7（最新，帧数修复+重拍链已启用）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.7 (慢动作重拍 4轨对比·帧数修复·重拍链启用).json`（在 v2.6 基础上启用重拍链 17 节点，加载即跑，见 5.9）
 
 ---
 
@@ -226,6 +227,18 @@ H3V2VInit.LATENT + 原生 ref2va 模型 + H3InjectSchedule(simple 25步 inject 0
 **修复（v2.6）**：`H3JerkOracle.length` 改接 `ComfyMathExpression` 的 **INT 输出**（表达式 `max(5, round(a*24)) + (5 - (max(5, round(a*24)) % 17)) % 17`，a=时长秒数，自动按 17k+5 对齐 → 5s 时 = 124），与主轨实际帧数完全一致。TimeSmear 输出的新长度/新 hold_map 同步驱动 `ReferenceToVideo.length`（L91）与 `H3ExactRecover`/`H3AudioRecover`（L105/L107），全链帧数统一，不会连环错位。
 
 **用法 / How to use**：加载 v2.6 → 框选「BSAI MotionFix 重拍 ①–⑰」→ Ctrl+M 启用 → Run。
+
+---
+
+## 五.9、v2.7 修复说明：基于用户上传版直接修复（帧数+启用重拍链）
+## 5.9. v2.7 fix: applied on user-uploaded file (frame-count + enable re-shoot chain)
+
+**改动 / Changes**（在用户上传的 v2.6 保存版上直接应用）：
+1. **帧数修复**：`H3JerkOracle.length` 改接 `ComfyMathExpression.INT`（120→124，17k+5 对齐，见 5.8）。
+2. **重拍链 48–63、65 全部 mode=4(BYPA) → mode=0(启用)**：用户保存版里重拍链整组被绕过（第 4 轨不跑的保存状态），v2.7 加载即可直接运行，无需再手动 Ctrl+M。
+3. **H3V2VInit(51) freeze_grow=2 → 默认**（避免误冻结背景）。
+
+**用法 / How to use**：直接加载 v2.7 → Run。重拍链 17 节点已全部启用（含独立 ref2va 加载器 65），终稿轨（38–47）保持 BYPA，主轨/FastH3 与 FlashVSR 修复轨正常。
 
 ---
 
