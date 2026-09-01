@@ -12,6 +12,7 @@
 > - **v2.7（最新，帧数修复+重拍链已启用）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.7 (慢动作重拍 4轨对比·帧数修复·重拍链启用).json`（在 v2.6 基础上启用重拍链 17 节点，加载即跑，见 5.9）
 > - **v2.8（最新，turbo 加速版）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.8 (慢动作重拍 4轨对比·turbo加速).json`（重拍二次采样 18 步 → 6 步 + turbo LoRA 加速，见 5.10）
 > - **v2.9（当前推荐，卡死修复版）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.9 (慢动作重拍 4轨对比·w4a8优化).json`（v2.8 在 24GB 卡 OOM 假死，本版用 w4a8 轻量模型 + ChunkFFN 修复，见 5.11）
+> - **FastH3 极速生成套件 v1.2（含 MotionFix 慢动作重拍组，当前推荐）**：`BSAI-ComfyUI-FastH3 (VSA稀疏注意力)极速生成套件 v1.2.json`（v1.1 第 4 轨重拍组停跑的 ghost-link 修复版，见 5.12）
 
 ---
 
@@ -276,6 +277,30 @@ H3V2VInit.LATENT + 原生 ref2va 模型 + H3InjectSchedule(simple 25步 inject 0
 **预期 / Expected**：重拍链模型显存占用 21GB → 12GB，避开 24GB 卡的 OOM 假死；6 步 beta + er_sde 提速保持（~36 分钟 → 8–12 分钟档）。**FastH3 主轨（4 步）不受影响，仍约 3 分钟。**
 
 **注意 / Caveats**：若仍显存紧张，ComfyUI 会自动把 FastH3 主轨 offload 到内存再加载 w4a8（动态 VRAM 管理），会略增重拍前等待；`MiniMaxChunkFeedForward.chunks` 可提到 3–4 进一步降峰值显存。
+
+---
+
+## 五.12、FastH3 极速生成套件 v1.2：重拍组停跑 ghost-link 修复
+## 5.12. FastH3 quick-kit v1.2: re-shoot group stall fix (ghost links)
+
+**问题 / Problem**：`BSAI-ComfyUI-FastH3 (VSA稀疏注意力)极速生成套件 v1.1` 运行到第 4 轨（BSAI MotionFix 慢动作重拍组）直接停止、无有效输出。节点面板上 `H3JerkOracle(48)`/`H3TimeSmear(49)`/`VAEEncode(50)` 看似已连线，但实际执行报"缺少必需输入"。
+
+**根因 / Root cause**：工作流文件里存在**幽灵链接（ghost links）**——重拍链的 5 条必需连线在保存时被删除，但节点槽（inputs/outputs）里残留了旧 link 引用（L75/L76/L77/L78/L79）。而这些 link id 在 links 数组中实际被**终稿轨**占用（`68→69`、`38→68`、`69→41`、`69→39`），L77 更已被删除。运行时节点读不到真正连线 → 输入为 None → 报错停跑。
+
+**修复（v1.2）**：清除全部幽灵引用，用新 link id（L116–L120）重建重拍链 5 条必需连线：
+| 新线 | 内容 | 作用 |
+|---|---|---|
+| L116 | `11(SamplerCustomAdvanced).output → 48(H3JerkOracle).samples` | 主轨 latent 喂动作热力检测 |
+| L117 | `21(ComfyMathExpression).INT → 48(H3JerkOracle).length` | 帧数 17k+5 对齐 |
+| L118 | `48(H3JerkOracle).hold_map → 49(H3TimeSmear).hold_map` | 动作热区 → 慢放映射 |
+| L119 | `12(VAEDecode).IMAGE → 49(H3TimeSmear).images` | 主轨视频帧喂慢放 |
+| L120 | `49(H3TimeSmear).images → 50(VAEEncode).pixels` | 慢放帧编码进重拍 latent |
+
+终稿轨连线（L75/76/78/79）不受影响。
+
+**验证 / Verified**：全部 69 节点类型在线（object_info）；幽灵引用 0；重拍链必需输入（samples/length/images/pixels）全部连接；全工作流无无效链接。
+
+**用法 / How to use**：直接加载 v1.2 → Run。主轨 FastH3（4 步）→ FlashVSR 修复轨 → 慢动作重拍轨顺序执行，不再停跑。
 
 ---
 
