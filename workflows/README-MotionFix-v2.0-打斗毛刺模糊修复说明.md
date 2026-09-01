@@ -10,6 +10,7 @@
 > - **v2.5（修复版，若 v2.3/v2.4 第 4 轨停跑用这个）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.5 (慢动作重拍 4轨对比·修复).json`（修复第 4 轨 model=None 停跑，见 5.7）
 > - **v2.6（当前推荐，帧数修复版）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.6 (慢动作重拍 4轨对比·帧数修复).json`（修复 hold map 120 vs batch 124 报错，见 5.8）
 > - **v2.7（最新，帧数修复+重拍链已启用）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.7 (慢动作重拍 4轨对比·帧数修复·重拍链启用).json`（在 v2.6 基础上启用重拍链 17 节点，加载即跑，见 5.9）
+> - **v2.8（最新，turbo 加速版）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.8 (慢动作重拍 4轨对比·turbo加速).json`（重拍二次采样 18 步 → 6 步 + turbo LoRA 加速，见 5.10）
 
 ---
 
@@ -239,6 +240,23 @@ H3V2VInit.LATENT + 原生 ref2va 模型 + H3InjectSchedule(simple 25步 inject 0
 3. **H3V2VInit(51) freeze_grow=2 → 默认**（避免误冻结背景）。
 
 **用法 / How to use**：直接加载 v2.7 → Run。重拍链 17 节点已全部启用（含独立 ref2va 加载器 65），终稿轨（38–47）保持 BYPA，主轨/FastH3 与 FlashVSR 修复轨正常。
+
+---
+
+## 五.10、v2.8 turbo 加速版：重拍二次采样 18 步 → 6 步
+## 5.10. v2.8 turbo edition: re-shoot pass 18 -> 6 steps
+
+**背景 / Background**：实测 v2.7 重拍二次采样耗时 **2193 秒（≈36.6 分钟）**——重拍 18 步 partial denoise（25 步×inject 0.7）+ 24GB 卡跑 20GB 原生模型触发 offload，步速飙到 ~122s/步。不改速度则重拍轨没有实用意义。
+
+**提速方案（v2.8，对齐 MAINodes 官方 ref2va 样例 `motion_pipeline_ref2va.json`）**：
+1. **新增 `LoraLoaderModelOnly(66)`**：挂 `minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors`（本机 LoRA，strength 0.8），重拍链 model 65→66。turbo LoRA 让原生模型可用更少步数。
+2. **H3InjectSchedule(56)**：`['beta', 6, 0.7, 'faithful detail 0.50 (metric best)']`——25 步 → **6 步**（官方 ref2va 样例实测配置）。
+3. **KSamplerSelect(55)**：`res_multistep → er_sde`（官方 turbo 图推荐采样器）。
+4. **H3JerkOracle(48)**：q 0.75 → 0.80（收紧热区，减少慢放 token 膨胀，进一步省时）。
+
+**预期提速 / Expected speedup**：步数 18→6（~3x）+ er_sde 采样器更快 + 热区收紧，重拍轨预计从 ~36 分钟降到 **8–12 分钟**（~3–4x）。若仍需更快：`LoraLoaderModelOnly` 强度可提到 1.0、`H3InjectSchedule.total_steps` 可降到 4（官方 turbo 极值），或 `H3JerkOracle q` 提到 0.85。
+
+**注意 / Caveats**：turbo LoRA 会轻微改变画风/细节（LoRA 通病）；若对质量敏感，可把 `LoraLoaderModelOnly(66)` BYPA 掉，恢复 v2.7 的 25 步原生重拍（质量优先档）。
 
 ---
 
