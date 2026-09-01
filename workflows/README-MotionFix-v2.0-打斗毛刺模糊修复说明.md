@@ -8,6 +8,7 @@
 > - v2.2：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.2 (参数优化 3轨对比).json`（3 轨对比 + 参数最优档，见第五章）
 > - **v2.3（最新/推荐）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.3 (慢动作重拍 4轨对比).json`（v2.2 + 内置 MAINodes 慢动作重拍链，见第五章 5.6）
 > - **v2.5（修复版，若 v2.3/v2.4 第 4 轨停跑用这个）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.5 (慢动作重拍 4轨对比·修复).json`（修复第 4 轨 model=None 停跑，见 5.7）
+> - **v2.6（当前推荐，帧数修复版）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.6 (慢动作重拍 4轨对比·帧数修复).json`（修复 hold map 120 vs batch 124 报错，见 5.8）
 
 ---
 
@@ -214,6 +215,20 @@ H3V2VInit.LATENT + 原生 ref2va 模型 + H3InjectSchedule(simple 25步 inject 0
 **提醒 / Caveat**：24GB 显存下，重拍链（独立 ref2va 19.5GB）与主轨 FastH3（21GB）会先后驻留显存，建议一次只启用「重拍链」或「终稿轨」之一，FlashVSR 修复轨可保留。
 
 ---
+
+## 五.8、v2.6 修复说明：hold map 120 vs batch 124（H3TimeSmear 断言失败）
+## 5.8. v2.6 fix: hold map 120 vs batch 124 (H3TimeSmear assertion)
+
+**现象 / Symptom**：第 4 轨跑到 `H3TimeSmear` 报 `AssertionError: hold map covers 120 frames, batch has 124`。
+
+**根因 / Root cause**：H3 视频长度遵循 **17k+5** 规则（124 = 17×7+5）。主轨 `ReferenceToVideo.length` 传 120 时 H3 内部会自动向上对齐到 **124 帧**，但重拍链 `H3JerkOracle.length` 仍直接取 `MotionFix.ref_length=120`，生成的 hold_map 只有 120 项，而 `H3TimeSmear` 收到的 images batch 是 124 帧 → 长度断言失败。
+
+**修复（v2.6）**：`H3JerkOracle.length` 改接 `ComfyMathExpression` 的 **INT 输出**（表达式 `max(5, round(a*24)) + (5 - (max(5, round(a*24)) % 17)) % 17`，a=时长秒数，自动按 17k+5 对齐 → 5s 时 = 124），与主轨实际帧数完全一致。TimeSmear 输出的新长度/新 hold_map 同步驱动 `ReferenceToVideo.length`（L91）与 `H3ExactRecover`/`H3AudioRecover`（L105/L107），全链帧数统一，不会连环错位。
+
+**用法 / How to use**：加载 v2.6 → 框选「BSAI MotionFix 重拍 ①–⑰」→ Ctrl+M 启用 → Run。
+
+---
+
 - 工作流 JSON 合法（v2.2：47 节点 / 68 连线），全部节点类已在运行中的 ComfyUI 注册（object_info 核对通过）。
 - FlashVSRNode scale=2（合法区间 2–4）/ VHS_VideoCombine / 终稿轨各节点输入接线与节点 schema 一致。
 - MotionFix 节点源码 `py_compile` 通过。
