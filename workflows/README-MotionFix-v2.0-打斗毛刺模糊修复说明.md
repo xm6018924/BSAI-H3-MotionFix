@@ -7,6 +7,7 @@
 > - v2.1：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.1 (含原生20步终稿轨).json`（在 v2.0 基础上新增「原生 20–24 步终稿轨」）
 > - v2.2：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.2 (参数优化 3轨对比).json`（3 轨对比 + 参数最优档，见第五章）
 > - **v2.3（最新/推荐）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.3 (慢动作重拍 4轨对比).json`（v2.2 + 内置 MAINodes 慢动作重拍链，见第五章 5.6）
+> - **v2.5（修复版，若 v2.3/v2.4 第 4 轨停跑用这个）**：`BSAI H3 MotionFix 打斗毛刺模糊修复 v2.5 (慢动作重拍 4轨对比·修复).json`（修复第 4 轨 model=None 停跑，见 5.7）
 
 ---
 
@@ -195,7 +196,24 @@ H3V2VInit.LATENT + 原生 ref2va 模型 + H3InjectSchedule(simple 25步 inject 0
 
 ---
 
-## 六、已校验 / Verified
+## 五.7、v2.5 修复说明：第 4 轨停跑（model=None）
+## 5.7. v2.5 fix: Track-4 stalls (model=None)
+
+**现象 / Symptom**：主程序（FastH3 4 步轨）与第 2 轨（FlashVSR 修复）正常出片，轮到第 4 轨（慢动作重拍）直接停、无输出。
+
+**根因 / Root cause**：v2.3/v2.4 中重拍链的二次采样 `BasicGuider` 与 `H3InjectSchedule` 的 model 取自「终稿轨」的 `UNETLoader(38)`；一旦把终稿轨整组 **BYPA（mode=4 绕过）**，38 不执行、其 MODEL 输出为 None，二次采样拿到 None 模型 → 链中断停跑。
+
+**修复（v2.5）**：
+1. **新增独立 `UNETLoader(65)`** 专供重拍链，加载原生 `minimax_h3_ref2va_pruned_int8_convrot`，重拍链的 `BasicGuider(53)` / `H3InjectSchedule(56)` 改接 65——不再依赖终稿轨的 38，终稿轨可自由 BYPA。
+2. **H3AudioRecover(61)** fps 错位 1→24（之前音频按 1fps 恢复，时长错乱）。
+3. **H3TimeSmear(49)** hold_map widget 清空（由 JerkOracle 输入接管，避免 widget 值干扰）。
+4. **H3V2VInit(51)** freeze_grow 还原默认（避免误冻结背景）。
+
+**用法 / How to use**：加载 v2.5 → 框选「BSAI MotionFix 重拍 ①–⑰」→ Ctrl+M 启用 → Run。重拍链自带独立模型加载，不再受终稿轨 BYPA 影响。
+
+**提醒 / Caveat**：24GB 显存下，重拍链（独立 ref2va 19.5GB）与主轨 FastH3（21GB）会先后驻留显存，建议一次只启用「重拍链」或「终稿轨」之一，FlashVSR 修复轨可保留。
+
+---
 - 工作流 JSON 合法（v2.2：47 节点 / 68 连线），全部节点类已在运行中的 ComfyUI 注册（object_info 核对通过）。
 - FlashVSRNode scale=2（合法区间 2–4）/ VHS_VideoCombine / 终稿轨各节点输入接线与节点 schema 一致。
 - MotionFix 节点源码 `py_compile` 通过。
