@@ -311,3 +311,31 @@ H3V2VInit.LATENT + 原生 ref2va 模型 + H3InjectSchedule(simple 25步 inject 0
 - MotionFix node source passes `py_compile`.
 
 **未尽事项 / Remaining**: FlashVSR 首次运行需联网下载模型；原生终稿轨首次启用会加载 19.5GB ref2va 模型（与 FastH3 轨同时启用时显存占用较高，建议终稿轨单独启用）；端到端出片未在本机 GPU 跑通验证（受限于生成时长），建议先跑一个 5s 打斗测试段对比快轨/修复/终稿三版。
+
+
+---
+
+## 5.13、v2.10 PDD 8步加速版：重拍链官方加速（全球最新技术 2026-09-02）
+## 5.13. v2.10 PDD 8-step edition: official acceleration for the re-shoot chain (2026-09-02)
+
+**背景 / Background**：检索到全球最新技术迭代——alibaba-pai 官方发布 **PDD（Parallel Decoding Distillation）8 步加速 LoRA**（MiniMax-H3-Acc-LoRAs，rank=64），ComfyUI 核心 **#15908** 已合并支持。相比 v2.9 用的 4 步 turbo LoRA，PDD 是**官方蒸馏的 8 步**方案，质量更高、8 NFE 依然快，且彻底规避 turbo LoRA 的 OOM/假死风险（v2.9 教训）。
+
+**新增依赖（仅 PDD 轨需要）/ New deps (PDD track only)**：
+| 组件 | 来源 | 放置 |
+|---|---|---|
+| ComfyUI-MiniMax-H3-PDD-Acc 节点 | github.com/Jalen-Brunson/ComfyUI-MiniMax-H3-PDD-Acc | custom_nodes/ |
+| minimax_h3_ref2va_pdd_acc_8step_comfyui.safetensors | alibaba-pai 官方 | models/pdd_acc/ |
+| ComfyUI ≥ #15908 | ComfyUI master | 本机已验证 |
+
+**改造内容（v2.10）**：
+1. 重拍链模型链路 65(w4a8) → 67(ChunkFFN) → 66(turbo LoRA) 升级为 65 → 67 → 70(MiniMaxH3SigmaShift 12/3) → 71(MiniMaxH3PDDAccApply ref2va 8step)
+2. 71.model → 53(BasicGuider)/56；新增 72(MiniMaxH3PDDAccScheduler denoise=0.50) → 57.sigmas
+3. 采样器 er_sde → euler（PDD recipe 强制）；移除 66 turbo LoRA；56 InjectSchedule 置 BYP
+
+**denoise=0.50 语义**：PDD 8 步边界 [1.0, 0.988, 0.973, 0.952, 0.923, 0.878, 0.800, 0.632, 0.0]；denoise=0.50 → 起点 sigma 0.923、跑 4 块，保留 V2V 初始结构 + PDD 精修。想更快调 0.3（2 块，起点 0.8），想更发散调 0.7（6 块，起点 0.973）。
+
+**验证 / Verified**：71 节点 / 112 连线；幽灵链接 0；PDD 链路与终稿轨 68/69 无冲突；重拍链必需输入全部连接。
+
+**文件 / File**：workflows/BSAI-ComfyUI-FastH3-(VSA稀疏注意力)极速生成套件 v2.10 PDD加速.json
+
+---
