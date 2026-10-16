@@ -53,24 +53,24 @@ class BSAI_H3_MotionFix:
         return {
             "required": {
                 "motion_level": (
-                    ["fast_action 高速动作/打斗 (出拳/奔跑/转身)",
-                     "medium 中等运动 (行走/手势/对话微动)",
-                     "static_slow 静态慢镜 (站姿对话/氛围镜头)"],
-                    {"default": "fast_action 高速动作/打斗 (出拳/奔跑/转身)"}),
+                    ["fast_action (punch/run/turn)",
+                     "medium (walk/gesture/dialogue micro-motion)",
+                     "static_slow (static dialogue/atmosphere)"],
+                    {"default": "fast_action (punch/run/turn)"}),
                 "use_turbo_lora": ("BOOLEAN", {"default": False,
-                                               "label_on": "启用 Turbo/加速 LoRA",
-                                               "label_off": "原生采样"}),
+                                               "label_on": "Enable Turbo/accelerated LoRA",
+                                               "label_off": "Native sampling"}),
                 "ref_weight": ("FLOAT", {"default": 0.85, "min": 0.0, "max": 1.0,
                                          "step": 0.01}),
                 "clip_seconds": ("FLOAT", {"default": 8.0, "min": 1.0, "max": 30.0,
                                            "step": 1.0}),
                 "attention": (
-                    ["kitchen_attention", "sage_attention", "sla", "native 原生"],
+                    ["kitchen_attention", "sage_attention", "sla", "native"],
                     {"default": "kitchen_attention"}),
             },
             "optional": {
                 "base_negative": ("STRING", {"default": "", "multiline": True,
-                                             "placeholder": "已有负向词（可选，会被合并）"}),
+                                             "placeholder": "Existing negative prompt (optional, will be merged)"}),
             },
         }
 
@@ -91,42 +91,43 @@ class BSAI_H3_MotionFix:
         # ── 采样步数 ──
         if level == "fast":
             if use_turbo_lora:
-                steps = ("【建议】关闭 Turbo LoRA，回原生 20–24 步采样\n"
-                         "  · 若必须用 Turbo：提高到 8 步（4 步在打斗/奔跑必然拖影/残影）\n"
-                         "  · Turbo LoRA 需配完整基座权重，勿用于剪枝模型")
+                steps = ("Recommendation: turn off the Turbo LoRA and use native 20-24 step sampling\n"
+                         "  - If you must use Turbo: raise to 8 steps (4 steps will smear/ghost on fights and running)\n"
+                         "  - Turbo LoRA needs the full base weights; do not use it on pruned models")
             else:
-                steps = "【建议】原生采样 20–24 步（高速动作最稳档位）"
+                steps = "Recommendation: native 20-24 step sampling (most stable for fast action)"
         elif level == "medium":
-            steps = ("【建议】Turbo 用 6–8 步（勿用 4 步）；原生采样 20 步\n"
-                     "  · 大姿态/转头镜头 ≤8 步时关闭 Turbo 更稳")
+            steps = ("Recommendation: Turbo 6-8 steps (not 4); native 20 steps\n"
+                     "  - For large-pose/turn shots, turning Turbo off below 8 steps is more stable")
         else:
-            steps = "【建议】Turbo 4–8 步即可（静态微动拖影风险低）；原生 20 步"
+            steps = "Recommendation: Turbo 4-8 steps is fine (low smear risk for static micro-motion); native 20 steps"
 
         # ── 注意力方案 ──
         if attention == "sage_attention":
             if level == "fast":
-                att = ("【警告】SageAttention 在打斗/快速动作镜头易出边缘虚影与画面撕裂。\n"
-                       "  → 动作镜头请切换为 Kitchen Attention（二者不可同开）")
+                att = ("WARNING: SageAttention tends to produce edge ghosting and frame tearing on fight/fast-action shots.\n"
+                       "  -> Switch action shots to Kitchen Attention (the two cannot be enabled together)")
             else:
-                att = "SageAttention 可用于静态对话戏份；动作镜头请切换 Kitchen Attention"
+                att = "SageAttention is acceptable for static dialogue scenes; switch action shots to Kitchen Attention"
         elif attention == "sla":
-            att = ("SLA 稀疏注意力（社区 2026-08 最新）：训练时专门补齐动态运动样本，"
-                   "对中远景人脸糊 + 拖影收敛好；配 6–8 步 + CFG 6–7 最稳，"
-                   "适合打斗/奔跑大动态。注意：16G 以下显卡兼容性一般，节点报红或加速冲突时"
-                   "改回 Kitchen Attention；同一时间只启用一种注意力加速，勿与 Turbo/Sage 混搭")
+            att = ("SLA sparse attention (community latest, 2026-08): trained specifically with dynamic-motion samples, "
+                   "converges well on mid/wide face blur and smearing; most stable with 6-8 steps + CFG 6-7, "
+                   "suited to fights/running large motion. Note: compatibility is mediocre below 16GB VRAM; "
+                   "if the node errors or accelerators conflict, switch back to Kitchen Attention; "
+                   "enable only one attention accelerator at a time, never mix with Turbo/Sage")
         else:
-            att = "Kitchen Attention 适合动作镜头（相对 SageAttention 更稳，无撕裂/虚影）"
+            att = "Kitchen Attention is suited to action shots (more stable than SageAttention, no tearing/ghosting)"
 
         # ── 参考权重 ──
         if level == "fast":
-            rw = (f"【建议】参考权重降至 0.78–0.82（大姿态/转头/出拳，高权重会拉扯五官）；\n"
-                  f"  当前 {ref_weight:.2f} → 请下调到 0.80 附近"
+            rw = (f"Recommendation: lower the reference weight to 0.78-0.82 (large pose/turn/punch; high weight distorts features);\n"
+                  f"  current {ref_weight:.2f} -> please lower it toward 0.80"
                   if ref_weight >= 0.85 else
-                  f"【建议】参考权重保持在 0.78–0.82（当前 {ref_weight:.2f} 合适）")
+                  f"Recommendation: keep the reference weight at 0.78-0.82 (current {ref_weight:.2f} is fine)")
         elif level == "medium":
-            rw = f"【建议】参考权重 0.82–0.85（当前 {ref_weight:.2f}）"
+            rw = f"Recommendation: reference weight 0.82-0.85 (current {ref_weight:.2f})"
         else:
-            rw = f"【建议】参考权重 0.85–0.88 锁人设（当前 {ref_weight:.2f}）"
+            rw = f"Recommendation: reference weight 0.85-0.88 to lock the character (current {ref_weight:.2f})"
 
         # ── 负向词 ──
         neg = NEG_FAST if level == "fast" else NEG_STATIC
@@ -137,52 +138,52 @@ class BSAI_H3_MotionFix:
         # ── 检查清单 ──
         if level == "fast":
             checklist = (
-                "① 拆段：单次生成 ≤5 秒（当前 %.0f 秒%s），帧数再砍半最直接\n"
-                "② 分辨率降到 0.5MP 档（16:9→960×544 / 竖屏→768×1344）："
-                "4-step 蒸馏模型在 1MP 高速动作必然毛刺，降一档最有效\n"
-                "③ 固定 seed + 用上一段结尾画面做参考首帧，分段接力生成\n"
-                "④ 动作镜头单独拆细；后期拼接处留 2–3 帧重叠，不硬切\n"
-                "⑤ 若仍毛刺/闪烁：成片关掉全部加速（VSA/Sage/Turbo）重跑一版对比\n"
-                "⑥ 高权重 + 大动作=双重约束拉扯 → 参考权重下调到 0.78–0.82\n"
-                "⑦ v2.0 工作流已内置 FlashVSR 时序修复分支：VAEDecode→FlashVSR(去毛刺+超分)→合成。"
-                "逐帧去噪 + 时间一致性，对打斗毛刺/模糊最直接有效；scale 保持 2（勿开 4 倍放大）\n"
-                "⑧ 终稿轨：打斗镜头改用原生 20–24 步模型"
-                "（minimax_h3_fl2va_pruned_int8_convrot / ref2va_pruned_int8_convrot 已就绪）。"
-                "4 步蒸馏对高速打斗的模糊/毛刺属模型固有，原生步数可根治；v2.1 起已内置"
-                "该终稿轨（默认静音，Ctrl+M 启用一键对比）\n"
-                "⑨ 若打斗仍拖影：用 SLA 稀疏注意力 + 6–8 步 + CFG 6–7（专补动态样本，"
-                "中远景人脸与拖影收敛好）；同一时间只启用一种加速，勿与 Turbo/Sage 混搭\n"
-                "⑩ 慢动作重拍方案（ComfyUI-MAINodes）: Jerk Oracle 动作热力→Time Smear 慢放"
-                "→重绘→恢复帧率，专修快速动作残影；等效抖音 edgid nose 插件") % (clip_seconds,
-                "（已拆段）" if clip_seconds <= 5 else " → 建议再拆短")
+                "1) Split segments: generate <=5 s at a time (currently %.0f s%s), halving the frame count is the most direct fix\n"
+                "2) Lower resolution to the 0.5MP tier (16:9 -> 960x544 / portrait -> 768x1344): "
+                "the 4-step distilled model inevitably glitches on 1MP fast action; one tier down is most effective\n"
+                "3) Fix the seed and use the previous segment's last frame as the reference first frame for relay generation\n"
+                "4) Split action shots finer; keep 2-3 overlapping frames at joins instead of hard cuts\n"
+                "5) If glitches/flicker persist: rerun a comparison with ALL acceleration off (VSA/Sage/Turbo)\n"
+                "6) High weight + large motion = double constraint pull -> lower the reference weight to 0.78-0.82\n"
+                "7) The v2.0 workflow already has a FlashVSR temporal-fix branch: VAEDecode->FlashVSR(deglitch+SR)->compose. "
+                "Per-frame denoise + temporal consistency directly fixes fight glitches/blur; keep scale at 2 (do not open 4x)\n"
+                "8) Final master track: switch fight shots to the native 20-24 step model "
+                "(minimax_h3_fl2va_pruned_int8_convrot / ref2va_pruned_int8_convrot are ready). "
+                "Blur/glitch on fast fights is inherent to the 4-step distill; native steps fix it; "
+                "built into the workflow since v2.1 (muted by default, Ctrl+M enables one-click A/B)\n"
+                "9) If fights still smear: use SLA sparse attention + 6-8 steps + CFG 6-7 (adds dynamic samples, "
+                "converges well on mid/wide faces and smears); enable only one accelerator, never mix with Turbo/Sage\n"
+                "10) Slow-motion re-shoot (ComfyUI-MAINodes): Jerk Oracle motion heat -> Time Smear slow-down "
+                "-> re-render -> restore frame rate, purpose-built for fast-action ghosting; equivalent to the edgid-nose plugin") % (clip_seconds,
+                " (already split)" if clip_seconds <= 5 else " -> split shorter")
         elif level == "medium":
             checklist = (
-                "① 单次生成 ≤15 秒；固定 seed 分段接力\n"
-                "② 转头/侧身镜头参考权重 0.78–0.82\n"
-                "③ 若拖影：步数提到 8 步或关 Turbo\n"
-                "④ 分辨率保持 1344×768 原生")
+                "1) Generate <=15 s per run; fix the seed and use segment relay\n"
+                "2) Turn/profile shots: reference weight 0.78-0.82\n"
+                "3) If smearing: raise steps to 8 or turn Turbo off\n"
+                "4) Keep the native 1344x768 resolution")
         else:
             checklist = (
-                "① 静态镜头可放长（≤20s），权重 0.85–0.88 锁人设\n"
-                "② 负向词用精简通用版，勿堆砌以免画面变死板\n"
-                "③ 关注时序漂移：每 4–6 个镜头重刷一次人设参考图")
+                "1) Static shots can run long (<=20s); weight 0.85-0.88 locks the character\n"
+                "2) Use the concise generic negative prompt; don't pile on terms or the frame becomes stiff\n"
+                "3) Watch for temporal drift: refresh the character reference image every 4-6 shots")
 
         # ── 后处理 ──
         post = (
-            "成片后处理（修残影/模糊/噪点）：\n"
-            "  · v2.0+ 工作流已内置 FlashVSR 时序修复分支（VAEDecode→FlashVSR→合成），"
-            "逐帧去噪 + 时间一致性，是本链路最适配的毛刺/噪点修复；scale 保持 2，"
-            "4 倍放大对高动态打斗会放大噪点/伪影（首跑自动下载模型）\n"
-            "  · 慢动作重拍（ComfyUI-MAINodes Jerk Oracle+Time Smear）：动作热力→慢放→重绘→恢复帧率，"
-            "H3 快速动作残影专修（等效抖音 edgid nose）\n"
-            "  · latent upscaler + 精修（ComfyUI_Minimax_h3_latent_Upscaler）：学习式 3D 放大 + "
-            "低 sigma 二采，修放大超 2 倍线条/碎玻璃瑕疵；与 Spectrum/DiffAid 联动 h3_refinement\n"
-            "  · FlashVSR_Ultra_Fast 视频超分（也可用 BSAI-H3-upscale-4K 的 Topaz/FlashVSR 档）\n"
-            "  · LTX2.5 二次采样放大（≈0.45 降噪）→ 修复动作镜头脸部模糊/残影\n"
-            "  · SeedVR2 / Topaz 超分 → 768P 母片提至 1080P/4K\n"
-            "  · ComfyUI-Spectrum-MiniMax-H3 → ER-SDE forecast confetti 修复 + offline\n"
-            "    smoothing replay 去时序闪烁（保持 11 actual / 9 forecast 原生调度）\n"
-            "  · 分块超分注意接缝与时间闪烁：正常速度播放两遍再逐帧验眼/嘴/发际线")
+            "Post-processing for the final cut (fixes ghosting/blur/noise):\n"
+            "  - The v2.0+ workflow has a FlashVSR temporal-fix branch (VAEDecode->FlashVSR->compose), "
+            "per-frame denoise + temporal consistency, the best-fit glitch/noise fix in this pipeline; keep scale at 2, "
+            "4x upscale amplifies noise/artifacts on high-dynamic fights (model auto-downloads on first run)\n"
+            "  - Slow-motion re-shoot (ComfyUI-MAINodes Jerk Oracle + Time Smear): motion heat -> slow-down -> re-render -> restore frame rate, "
+            "purpose-built for H3 fast-action ghosting (equivalent to the edgid-nose plugin)\n"
+            "  - latent upscaler + refine (ComfyUI_Minimax_h3_latent_Upscaler): learned 3D upscale + "
+            "low-sigma second pass, fixes line/crushed-glass artifacts above 2x; h3_refinement hooks into Spectrum/DiffAid\n"
+            "  - FlashVSR_Ultra_Fast video SR (or use the Topaz/FlashVSR tier of BSAI-H3-upscale-4K)\n"
+            "  - LTX2.5 second-pass upscale (~0.45 denoise) -> fixes facial blur/ghosting on action shots\n"
+            "  - SeedVR2 / Topaz SR -> lifts the 768P master to 1080P/4K\n"
+            "  - ComfyUI-Spectrum-MiniMax-H3 -> ER-SDE forecast confetti fix + offline\n"
+            "    smoothing replay removes temporal flicker (keep the native 11 actual / 9 forecast schedule)\n"
+            "  - Tiled SR: watch seams and temporal flicker; play through twice at normal speed, then check eyes/mouth/hairline per frame")
 
         # ── FastH3 蒸馏模型驱动输出（自动接入 BSAI-FastH3 极速链路）──
         # 注：FastH3 是 4-step 蒸馏模型（ladder 用训练跳点，勿改阶梯），
@@ -224,5 +225,5 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "BSAI_H3_MotionFix": "BSAI H3 MotionFix 高速动作毛刺噪点修复向导",
+    "BSAI_H3_MotionFix": "BSAI H3 MotionFix (fast-action glitch & noise repair guide)",
 }
