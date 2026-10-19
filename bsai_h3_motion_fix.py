@@ -41,8 +41,8 @@ BSAI-H3-MotionFix — MiniMax H3 高速运动/快速动作「毛刺 & 噪点」�
     · FlashVSR 注意: scale 用官方默认 2，勿开 4 倍——高动态打斗 4 倍放大会放大噪点/伪影。
 """
 
-NEG_FAST = "五官扭曲, 肢体穿模, 画面闪烁, 乱码文字, 画风突变, 肢体畸形, 手部崩坏, 画面撕裂"
-NEG_STATIC = "五官扭曲, 肢体穿模, 画面闪烁, 乱码文字, 画风突变"
+NEG_FAST = "distorted facial features, limb clipping, flickering frame, garbled text, style shift, limb deformity, broken hands, screen tearing"
+NEG_STATIC = "distorted facial features, limb clipping, flickering frame, garbled text, style shift"
 
 
 class BSAI_H3_MotionFix:

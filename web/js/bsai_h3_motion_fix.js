@@ -4,8 +4,8 @@ import { app } from "../../../scripts/app.js";
 // 纯前端规则引擎：节点创建 / 参数变化时实时计算并展示"修复方案卡"，
 // 与后端 bsai_h3_motion_fix.py 的规则保持一致（6 个 STRING 输出仍可连下游）。
 
-const NEG_FAST = "五官扭曲, 肢体穿模, 画面闪烁, 乱码文字, 画风突变, 肢体畸形, 手部崩坏, 画面撕裂";
-const NEG_BASE = "五官扭曲, 肢体穿模, 画面闪烁, 乱码文字, 画风突变";
+const NEG_FAST = "distorted facial features, limb clipping, flickering frame, garbled text, style shift, limb deformity, broken hands, screen tearing";
+const NEG_BASE = "distorted facial features, limb clipping, flickering frame, garbled text, style shift";
 
 function buildPlan(motion, turbo, refW, seconds, attention, baseNeg) {
   const L = [];
