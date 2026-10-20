@@ -44,6 +44,14 @@ BSAI-H3-MotionFix — MiniMax H3 高速运动/快速动作「毛刺 & 噪点」�
 NEG_FAST = "distorted facial features, limb clipping, flickering frame, garbled text, style shift, limb deformity, broken hands, screen tearing"
 NEG_STATIC = "distorted facial features, limb clipping, flickering frame, garbled text, style shift"
 
+# 旧版（中英混排）下拉标签：兼容老工作流 JSON 保存值，入口归一化到英文标签（语义完全相同）
+_LEGACY_MOTION_LEVEL = {
+    "fast_action 高速动作/打斗 (出拳/奔跑/转身)": "fast_action (punch/run/turn)",
+    "medium 中等运动 (行走/手势/对话微动)": "medium (walk/gesture/dialogue micro-motion)",
+    "static_slow 静态慢镜 (站姿对话/氛围镜头)": "static_slow (static dialogue/atmosphere)",
+}
+_LEGACY_ATTENTION = {"native 原生": "native"}
+
 
 class BSAI_H3_MotionFix:
     """高速动作毛刺/噪点修复向导：按运动等级输出步数/注意力/参考权重/负向词/检查清单/后处理。"""
@@ -55,7 +63,11 @@ class BSAI_H3_MotionFix:
                 "motion_level": (
                     ["fast_action (punch/run/turn)",
                      "medium (walk/gesture/dialogue micro-motion)",
-                     "static_slow (static dialogue/atmosphere)"],
+                     "static_slow (static dialogue/atmosphere)",
+                     # 后 3 项为旧版标签：兼容老工作流 JSON 保存值
+                     "fast_action 高速动作/打斗 (出拳/奔跑/转身)",
+                     "medium 中等运动 (行走/手势/对话微动)",
+                     "static_slow 静态慢镜 (站姿对话/氛围镜头)"],
                     {"default": "fast_action (punch/run/turn)"}),
                 "use_turbo_lora": ("BOOLEAN", {"default": False,
                                                "label_on": "Enable Turbo/accelerated LoRA",
@@ -65,7 +77,8 @@ class BSAI_H3_MotionFix:
                 "clip_seconds": ("FLOAT", {"default": 8.0, "min": 1.0, "max": 30.0,
                                            "step": 1.0}),
                 "attention": (
-                    ["kitchen_attention", "sage_attention", "sla", "native"],
+                    ["kitchen_attention", "sage_attention", "sla", "native",
+                     "native 原生"],  # 末项为旧版标签：兼容老工作流 JSON 保存值
                     {"default": "kitchen_attention"}),
             },
             "optional": {
@@ -85,6 +98,8 @@ class BSAI_H3_MotionFix:
 
     def run(self, motion_level, use_turbo_lora, ref_weight, clip_seconds,
             attention, base_negative=""):
+        motion_level = _LEGACY_MOTION_LEVEL.get(motion_level, motion_level)
+        attention = _LEGACY_ATTENTION.get(attention, attention)
         level = "fast" if motion_level.startswith("fast") else (
             "medium" if motion_level.startswith("medium") else "static")
 
